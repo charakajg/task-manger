@@ -85,3 +85,18 @@ Some of the folders and files
 - **Frontend**: React, Zustand, React Router, CSS/SASS
 - **Backend**: Node.js, Express, Mongoose, Node-Cron
 - **Testing**: Jest
+
+## How to test recurring tasks for dev/testing purposes
+
+Since you may not wait for hours/days to test recurring tasks.
+You can do the following:
+
+- First create a recurring task with a prefered frequency
+- <img width="1408" alt="Screenshot 2025-03-27 at 14 37 11" src="https://github.com/user-attachments/assets/3fd5a13f-aca6-416f-8639-791b2b3df2b6" />
+- Now, you must be able to see the schedule under "Recurring Schedules" in UI and there should be a task (first task) that had been already created
+- The next running date for the given task should be correct based on the frequency that you set.
+- <img width="1408" alt="Screenshot 2025-03-27 at 14 37 11" src="https://github.com/user-attachments/assets/3fdae2cb-945f-446b-b1ed-73d02b4121ed" />
+- If you want to test it soon, you can change the `nextRunningDate` via a MongoDB tool in db and set it to today.
+- <img width="865" alt="Screenshot 2025-03-27 at 14 40 15" src="https://github.com/user-attachments/assets/a7607b89-c3a5-4c69-87bb-8fbb8fca2bb9" />
+- Then when it automatically runs next hour, it will create a new task. You can speed this up further by changing the cronjob to run every minute (Replace "0 * * * *" with "* * * * *") under cronJobs.ts (Note that this hadn't been made configurable due to time limitations, so you would have to edit manually, for now)
+- <img width="865" alt="Screenshot 2025-03-27 at 14 40 15" src="https://github.com/user-attachments/assets/dd1d354d-eb0f-4399-a949-44eac6f2bdab" />
