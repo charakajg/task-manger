@@ -99,4 +99,5 @@ You can do the following:
 - If you want to test it soon, you can change the `nextRunningDate` via a MongoDB tool in db and set it to today.
 - <img width="865" alt="Screenshot 2025-03-27 at 14 40 15" src="https://github.com/user-attachments/assets/a7607b89-c3a5-4c69-87bb-8fbb8fca2bb9" />
 - Then when it automatically runs next hour, it will create a new task. You can speed this up further by changing the cronjob to run every minute (Replace "0 * * * *" with "* * * * *") under cronJobs.ts (Note that this hadn't been made configurable due to time limitations, so you would have to edit manually, for now)
-- <img width="865" alt="Screenshot 2025-03-27 at 14 40 15" src="https://github.com/user-attachments/assets/dd1d354d-eb0f-4399-a949-44eac6f2bdab" />
+- <img width="775" alt="Screenshot 2025-03-27 at 14 41 27" src="https://github.com/user-attachments/assets/549d8404-c3cc-4e8e-b689-335137047dee" />
+
