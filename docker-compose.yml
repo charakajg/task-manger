@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # MongoDB service
+  mongodb:
+    image: mongo:latest
+    container_name: task-manager-mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: taskdb
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - test_mongodb_data:/data/db
+    networks:
+      - task-manager-network
+
+  # Node.js application service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: task-manager-app
+    restart: always
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://admin:secret@mongodb:27017/taskdb?authSource=admin
+      - NODE_ENV=development
+    ports:
+      - "3000:3000"
+      - "8080:8080"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run start:dev
+    networks:
+      - task-manager-network
+
+networks:
+  task-manager-network:
+    driver: bridge
+
+volumes:
+  test_mongodb_data:

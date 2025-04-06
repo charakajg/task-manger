@@ -1,0 +1,744 @@
+// Color Variables
+$primary-color: #1063cf; // Darker Blue (improved contrast)
+$secondary-color: #157f2d; // Darker Green (improved contrast)
+$accent-color: #d4302b; // Darker Red (improved contrast)
+$background-color: #ffffff; // White (improved contrast)
+$text-color: #202124; // Nearly Black (improved contrast)
+
+// Additional Color Variables
+$white: #ffffff;
+$black-overlay: rgba(0, 0, 0, 0.5);
+$shadow-color: rgba(0, 0, 0, 0.1);
+$border-light: #ccc;
+$border-medium: #ddd;
+
+// Status Colors
+$status-completed: #28a745; // Green
+$status-incomplete: #dc3545; // Red
+
+// Spacing System
+$spacing-xs: 4px; // Extra small spacing
+$spacing-sm: 8px; // Small spacing (form elements, tight components)
+$spacing-md: 16px; // Medium spacing (between related elements)
+$spacing-lg: 24px; // Large spacing (between sections)
+$spacing-xl: 32px; // Extra large spacing (major page sections)
+
+// Border Radius
+$border-radius-sm: 4px; // Small radius (buttons, inputs)
+$border-radius-md: 8px; // Medium radius (cards, modals)
+$border-radius-lg: 12px; // Large radius (main containers)
+
+// Define CSS variables for use in JS
+:root {
+  --status-completed: #{$status-completed};
+  --status-incomplete: #{$status-incomplete};
+}
+
+// Global Styling
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  background-color: $background-color;
+}
+
+// Error Screen
+.error-screen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  h1 {
+    text-align: center;
+    color: $accent-color;
+  }
+}
+
+.error-message {
+  color: $accent-color;
+}
+
+// Layout Structure
+.app-container {
+  display: grid;
+  grid-template-rows: 60px 1fr;
+  grid-template-columns: 200px 1fr;
+  height: 100vh;
+
+  // Header Component
+  .header {
+    grid-column: span 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    &__title {
+      color: $accent-color;
+    }
+  }
+
+  // Navigation Component
+  .nav-bar {
+    display: flex;
+    flex-direction: column;
+    border-radius: 0 $border-radius-lg 0 0;
+    padding: $spacing-lg;
+    background-color: $accent-color;
+    align-items: center;
+    gap: $spacing-md;
+
+    &__link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      height: 50px;
+      width: 100%;
+      padding: $spacing-sm;
+      text-align: center;
+      border-radius: $border-radius-md;
+      text-decoration: none;
+      color: $white;
+      margin-bottom: $spacing-sm;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &.active {
+        background-color: $background-color;
+        color: $accent-color;
+      }
+
+      &:hover {
+        border: $spacing-xs solid $background-color;
+      }
+    }
+  }
+
+  // Main Content Area
+  .main-content {
+    display: flex;
+    border-radius: $border-radius-lg 0 0 0;
+    box-shadow: 0px 0px 50px 5px rgba($accent-color, 0.3);
+    padding: $spacing-md $spacing-md $spacing-md $spacing-lg;
+    width: 100%;
+    overflow-y: auto;
+
+    // Form Controls
+    input,
+    select,
+    button {
+      border: none;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    button:focus,
+    input:focus,
+    select:focus {
+      outline: none;
+    }
+
+    // Tasks View Component
+    .tasks-view {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      &__controls {
+        display: flex;
+        align-items: center;
+        gap: $spacing-md;
+        border-bottom: 1px solid $border-medium;
+        padding: $spacing-md;
+        background-color: rgba($white, 0.95);
+
+        input {
+          height: 38px;
+          width: 250px;
+          padding: $spacing-sm;
+          border: 1px solid $border-light;
+          border-radius: $border-radius-sm;
+          font-size: 0.95rem;
+
+          &:focus {
+            border-color: $primary-color;
+            box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+            outline: none;
+          }
+        }
+
+        select {
+          height: 38px;
+          padding: $spacing-xs $spacing-md;
+          border: 1px solid $border-light;
+          border-radius: $border-radius-sm;
+          background-color: $white;
+          font-size: 0.95rem;
+          min-width: 140px;
+
+          &:focus {
+            border-color: $primary-color;
+            box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+            outline: none;
+          }
+        }
+
+        .new-task-btn {
+          margin-left: auto;
+          padding: $spacing-sm $spacing-lg;
+          font-weight: 500;
+        }
+      }
+
+      &__entries {
+        padding: $spacing-md;
+        padding-bottom: $spacing-xl;
+        overflow-y: auto;
+        max-height: calc(100vh - 200px);
+        width: 100%;
+
+        .task-table {
+          border-radius: $border-radius-md;
+          width: 100%;
+          border-spacing: 0;
+          border-collapse: separate;
+          border: 1px solid $border-medium;
+          overflow: hidden;
+
+          thead {
+            margin: 0;
+            background-color: $primary-color;
+            color: $white;
+
+            th {
+              padding: $spacing-sm $spacing-md;
+              text-align: left;
+              font-weight: 600;
+              font-size: 0.95rem;
+              border-bottom: 1px solid rgba($white, 0.2);
+            }
+          }
+
+          tbody tr {
+            &:nth-child(even) {
+              background-color: rgba($border-light, 0.1);
+            }
+
+            &:hover {
+              background-color: rgba($primary-color, 0.05);
+            }
+          }
+
+          td {
+            border-bottom: 1px solid $border-light;
+            padding: $spacing-sm $spacing-md;
+            font-size: 0.95rem;
+
+            // Action buttons styling
+            &:last-child {
+              white-space: nowrap;
+
+              button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: $spacing-xs;
+                padding: $spacing-xs $spacing-sm;
+                border: none;
+                border-radius: $border-radius-sm;
+                font-size: 0.85rem;
+                background-color: $white;
+                color: $text-color;
+                border: 1px solid $border-light;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+                &:hover:not(:disabled) {
+                  background-color: darken($white, 5%);
+                  transform: translateY(-1px);
+                  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                }
+
+                &:disabled {
+                  opacity: 0.5;
+                  cursor: not-allowed;
+                }
+
+                svg {
+                  margin-right: $spacing-xs;
+                  font-size: 0.9rem;
+                }
+
+                // Edit button
+                &:nth-child(1) {
+                  color: $primary-color;
+                  border-color: rgba($primary-color, 0.3);
+
+                  &:hover {
+                    background-color: rgba($primary-color, 0.1);
+                  }
+                }
+
+                // Delete button
+                &:nth-child(2) {
+                  color: $accent-color;
+                  border-color: rgba($accent-color, 0.3);
+
+                  &:hover {
+                    background-color: rgba($accent-color, 0.1);
+                  }
+                }
+
+                // Mark as Done/Not Done button
+                &:nth-child(3) {
+                  color: $secondary-color;
+                  border-color: rgba($secondary-color, 0.3);
+
+                  &:hover:not(:disabled) {
+                    background-color: rgba($secondary-color, 0.1);
+                  }
+                }
+
+                // Delete button in schedule list
+                &.delete-btn {
+                  color: $accent-color;
+                  border-color: rgba($accent-color, 0.3);
+                  padding: $spacing-xs;
+                  width: 30px;
+                  height: 30px;
+
+                  svg {
+                    margin-right: 0;
+                    font-size: 1rem;
+                  }
+
+                  &:hover {
+                    background-color: rgba($accent-color, 0.1);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // Pagination Controls
+      .pagination-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: $spacing-md;
+        margin: $spacing-md 0;
+        padding: $spacing-md;
+        border-top: 1px solid $border-light;
+
+        span {
+          font-size: 0.95rem;
+          color: $text-color;
+          font-weight: 500;
+        }
+
+        .btn-dal {
+          padding: $spacing-sm $spacing-md;
+          background: $primary-color;
+          color: $white;
+          border: none;
+          border-radius: $border-radius-sm;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          font-weight: 500;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          margin-right: $spacing-sm;
+
+          &:last-child {
+            margin-right: 0;
+          }
+
+          &:hover:not(:disabled) {
+            background: darken($primary-color, 5%);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+          }
+
+          &:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+          }
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
+          }
+        }
+
+        // Action button variant
+        .btn-action {
+          background: $secondary-color;
+
+          &:hover:not(:disabled) {
+            background: darken($secondary-color, 5%);
+          }
+
+          &:disabled {
+            background: rgba($secondary-color, 0.7);
+          }
+        }
+      }
+
+      .new-task {
+        border: 2px solid $accent-color;
+        border-style: solid solid none solid;
+        border-radius: $border-radius-lg 0 0 0;
+        width: 100%;
+      }
+    }
+  }
+}
+
+// Modal Components
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: $black-overlay;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+
+  .modal-content {
+    background: $white;
+    padding: $spacing-lg;
+    border-radius: $border-radius-md;
+    width: 500px;
+    box-shadow: 0 8px 24px rgba($shadow-color, 0.8);
+    max-height: 90vh;
+    overflow-y: auto;
+
+    h2 {
+      margin-bottom: $spacing-lg;
+      font-size: 1.6rem;
+      color: $primary-color;
+      border-bottom: 2px solid rgba($primary-color, 0.2);
+      padding-bottom: $spacing-sm;
+    }
+  }
+
+  .modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: $spacing-xl;
+    padding-top: $spacing-md;
+    border-top: 1px solid $border-light;
+  }
+}
+
+// Task Form Component
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  width: 100%;
+  background: $background-color;
+
+  label {
+    font-weight: 600;
+    color: $text-color;
+    font-size: 0.95rem;
+  }
+
+  input,
+  select {
+    padding: $spacing-sm;
+    border: 1px solid $border-light;
+    border-radius: $border-radius-sm;
+    font-size: 0.95rem;
+    height: 38px;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+
+    &:focus {
+      border-color: $primary-color;
+      box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+      outline: none;
+    }
+  }
+
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right $spacing-sm center;
+    background-size: 1em;
+    padding-right: $spacing-xl;
+  }
+
+  .form-group {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    align-items: center;
+    gap: $spacing-md;
+  }
+
+  .recurring-section {
+    margin-top: $spacing-sm;
+    border-top: 1px solid $border-light;
+    padding-top: $spacing-md;
+
+    .checkbox-wrapper {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      padding: 0 $spacing-sm;
+      background-color: $white;
+      border: 1px solid $border-light;
+      border-radius: $border-radius-sm;
+    }
+
+    .recurring-check {
+      height: 18px;
+      width: 18px;
+      cursor: pointer;
+    }
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    overflow-y: auto;
+    margin: 0;
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: $white;
+      padding: $spacing-xs $spacing-sm;
+      border: 1px solid $border-medium;
+      border-radius: $border-radius-sm;
+      margin-bottom: $spacing-xs;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+      transition:
+        transform 0.1s,
+        box-shadow 0.1s;
+      font-size: 0.85rem;
+
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      button {
+        margin-left: $spacing-xs;
+        opacity: 0.7;
+        padding: 2px 6px;
+        height: 20px;
+        min-width: 20px;
+        font-size: 0.75rem;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  // Special treatment for dependencies group
+  .dependencies-group {
+    display: block;
+
+    .dependencies-container {
+      width: 100%;
+    }
+  }
+
+  .depencency-selection {
+    display: flex;
+    flex-direction: row;
+    gap: $spacing-md;
+    padding: $spacing-sm;
+    border: 1px solid $border-medium;
+    border-radius: $border-radius-md;
+    background: rgba($white, 0.7);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+
+    .dep-list,
+    .dep-search {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-xs;
+      min-height: 0;
+
+      h4 {
+        margin: 0;
+        padding: $spacing-xs 0;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: $text-color;
+      }
+
+      .empty-list {
+        padding: $spacing-xs;
+        background-color: rgba($border-light, 0.15);
+        border-radius: $border-radius-sm;
+        text-align: center;
+        color: rgba($text-color, 0.6);
+        font-style: italic;
+        font-size: 0.85rem;
+      }
+
+      input {
+        width: 100%;
+        padding: $spacing-xs $spacing-sm;
+        height: 28px;
+        min-height: 28px;
+      }
+
+      select {
+        height: 90px;
+        min-height: 80px;
+        max-height: 90px;
+        border: 1px solid $border-light;
+        background-color: $white;
+
+        option {
+          padding: $spacing-xs;
+          border-bottom: 1px solid rgba($border-light, 0.3);
+          font-size: 0.85rem;
+
+          &:checked {
+            background-color: rgba($primary-color, 0.1);
+            color: $primary-color;
+          }
+        }
+      }
+
+      .pagination-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: $spacing-xs 0;
+        height: 22px;
+
+        .pagination-btn {
+          padding: 0;
+          width: 22px;
+          height: 22px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: rgba($primary-color, 0.1);
+          color: $primary-color;
+          border-radius: $border-radius-sm;
+
+          &:disabled {
+            background-color: rgba($border-light, 0.2);
+            color: rgba($text-color, 0.3);
+          }
+
+          &:not(:disabled):hover {
+            background-color: rgba($primary-color, 0.2);
+          }
+        }
+
+        .pagination-info {
+          font-size: 0.75rem;
+          color: $text-color;
+        }
+      }
+
+      .add-dependency-btn {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: $spacing-xs;
+
+        button {
+          font-size: 0.85rem;
+          padding: $spacing-xs $spacing-sm;
+          height: 28px;
+        }
+      }
+    }
+  }
+}
+
+// Utility Classes
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: $spacing-lg;
+}
+
+// Button Styles
+.btn-dal {
+  padding: $spacing-sm $spacing-md;
+  background: $accent-color;
+  color: $white;
+  border: none;
+  border-radius: $border-radius-sm;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: $spacing-sm;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:hover:not(:disabled) {
+    background: darken($accent-color, 5%);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+}
+
+.btn-action {
+  background: $secondary-color;
+
+  &:hover:not(:disabled) {
+    background: darken($secondary-color, 5%);
+  }
+
+  &:disabled {
+    background: rgba($secondary-color, 0.7);
+  }
+}
+
+// Status Icon styling
+.status-label {
+  margin-left: $spacing-xs;
+}
